@@ -1,18 +1,21 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.11'
+        }
+    }
 
     stages {
-        stage('Install Python') {
+        stage('Install Dependencies') {
             steps {
-                sh 'apt-get update || true'
-                sh 'apt-get install -y python3 python3-pip || true'
+                sh 'pip install --upgrade pip'
+                sh 'pip install -r requirements.txt'
             }
         }
 
-        stage('Check Python') {
+        stage('Run Tests') {
             steps {
-                sh 'python3 --version'
-                sh 'pip3 --version'
+                sh 'pytest -v'
             }
         }
     }
