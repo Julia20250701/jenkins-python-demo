@@ -2,9 +2,17 @@ pipeline {
     agent any
 
     stages {
-        stage('Test Stage') {
+        stage('Install Python') {
             steps {
-                echo 'Pipeline is working!'
+                sh 'apt-get update || true'
+                sh 'apt-get install -y python3 python3-pip || true'
+            }
+        }
+
+        stage('Check Python') {
+            steps {
+                sh 'python3 --version'
+                sh 'pip3 --version'
             }
         }
     }
