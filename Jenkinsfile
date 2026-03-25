@@ -1,17 +1,15 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.11'
+        }
+    }
 
     stages {
-        stage('Checkout') {
-            steps {
-                echo 'Jenkins has the repository code available here.'
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
-                sh 'python3 -m pip install --upgrade pip'
-                sh 'pip3 install -r requirements.txt'
+                sh 'pip install --upgrade pip'
+                sh 'pip install -r requirements.txt'
             }
         }
 
@@ -19,24 +17,6 @@ pipeline {
             steps {
                 sh 'pytest -v'
             }
-        }
-
-        stage('Build Message') {
-            steps {
-                echo 'Build completed successfully.'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Pipeline finished with SUCCESS.'
-        }
-        failure {
-            echo 'Pipeline finished with FAILURE.'
-        }
-        always {
-            echo 'Pipeline is done.'
         }
     }
 }
